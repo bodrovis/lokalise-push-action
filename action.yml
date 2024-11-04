@@ -50,7 +50,9 @@ runs:
       K3: ${{ inputs.base_lang }}
     shell: bash
     run: |
-      "${{ github.action_path }}/bin/demoscript"
+      DEMO_SCRIPT_PATH="${{ github.action_path }}/bin/demoscript"
+      chmod +x "$DEMO_SCRIPT_PATH"
+      "$DEMO_SCRIPT_PATH"
 
   - name: Verify GITHUB_OUTPUT
     shell: bash
