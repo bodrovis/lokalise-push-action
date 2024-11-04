@@ -52,13 +52,16 @@ runs:
     run: |
       DEMO_SCRIPT_PATH="${{ github.action_path }}/bin/demoscript"
       chmod +x "$DEMO_SCRIPT_PATH"
-      "$DEMO_SCRIPT_PATH"
+
+      output=$("$DEMO_SCRIPT_PATH")
+        
+      echo "output_variable_name=$output" >> $GITHUB_OUTPUT
 
   - name: Verify GITHUB_OUTPUT
     shell: bash
     run: |
-      echo "Contents of GITHUB_OUTPUT file:"
-      cat $GITHUB_OUTPUT
+      echo "Captured output variable:"
+      echo "${{ steps.run-go-action.outputs.output_variable_name }}"
 
     # - name: Set translation paths
     #   id: translation-paths

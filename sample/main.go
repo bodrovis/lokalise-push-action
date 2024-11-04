@@ -20,11 +20,5 @@ func main() {
 	fmt.Printf("Base Language: %s\n", k3)
 
 	output := "some output value"
-	f, err := os.OpenFile(os.Getenv("GITHUB_OUTPUT"), os.O_APPEND|os.O_WRONLY, 0644)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error opening GITHUB_OUTPUT: %v\n", err)
-		os.Exit(1)
-	}
-	defer f.Close()
-	fmt.Fprintf(f, "output_variable_name=%s\n", output)
+	fmt.Println(output)
 }
