@@ -20,6 +20,10 @@ func main() {
 	fmt.Fprintf(os.Stderr, "Project ID: %s\n", k2)
 	fmt.Fprintf(os.Stderr, "Base Language: %s\n", k3)
 
+	// Only output the result to stdout
 	output := "some output value"
-	fmt.Println(output)
+	fmt.Println(output) // Expected to be captured as $output in GitHub Action
+
+	// Additional confirmation output
+	fmt.Fprintln(os.Stderr, "Output sent to stdout:", output)
 }
