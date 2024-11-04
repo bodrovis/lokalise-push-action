@@ -47,12 +47,23 @@ runs:
       id: translation-paths
       shell: bash
       run: |
+        set -e
+        shopt -s globstar nullglob
         > paths.txt
         translations_path="${{ inputs.translations_path }}"
+        base_lang="${{ inputs.base_lang }}"
+        file_format="${{ inputs.file_format }}"
+
         while IFS= read -r path; do
           path=$(echo "$path" | xargs)
           if [ -n "$path" ]; then
-            echo "./${path}/${{ inputs.base_lang }}/**/*.${{ inputs.file_format }}" >> paths.txt
+            for dir in ./${path}/${base_lang}; do
+              if [ -d "$dir" ]; then
+                echo "$dir/**/*.${file_format}" >> paths.txt
+              else
+                echo "Directory $dir does not exist."
+              fi
+            done
           fi
         done <<< "$translations_path"
 
@@ -82,6 +93,7 @@ runs:
       shell: bash
       run: |
         set -e
+        shopt -s globstar nullglob
 
         translations_path="${{ inputs.translations_path }}"
         base_lang="${{ inputs.base_lang }}"
@@ -91,11 +103,14 @@ runs:
         while IFS= read -r path; do
           path=$(echo "$path" | xargs)
           if [ -n "$path" ]; then
-            if [ -d "${path}/${base_lang}" ]; then
-              paths+=("${path}/${base_lang}")
-            else
-              echo "Directory ${path}/${base_lang} does not exist."
-            fi
+            expanded_paths=(./${path})
+            for p in "${expanded_paths[@]}"; do
+              if [ -d "$p" ]; then
+                paths+=("$p")
+              else
+                echo "Directory $p does not exist."
+              fi
+            done
           fi
         done <<< "$translations_path"
     
